@@ -3,7 +3,7 @@
 
 
 Project::Project(int id, std::string title, std::string DBname) : m_id(id), m_title(title), m_DBmediator (DBname){
-	//open();
+
 }
 
 Project::~Project(){
@@ -75,42 +75,10 @@ bool Project::createObject(std::vector<double> xyz, eObjType type, int group){
 		m_elements[baseObj->m_nameid] = baseObj;
 	}
 
-/* //IN THEORY I CANT NEVER CREATE A REPEATED OBJECT SINCE 
+	 //IN THEORY I CANT NEVER CREATE A REPEATED OBJECT SINCE 
 	 // THE PROGRAM WILL BE CREATING ID'S INCREMENTALLY - IF NEED TO REUSE THEM THEN 
 	 // A NEW IMPLEMENTATION WILL BE NEEDED
-	std::map<std::string,BaseObject*>::iterator it;
-	//create the possible nameID for the object to be created
-	std::ostringstream strNameID;
-	strNameID << sObjTypes[type] <<"_"<< type;
-	std::string nameid =  strNameID.str();
-	//find in the map the name ID
-	it = m_elements.find(nameid);
-	//if not found create a new object else return false
-  if (it == mymap.end()){
-		switch(type){
-			//case eBOUNDINGBOX:
-			//	baseObj = &BoundingBox(m_groupsid, m_id, type);
-			//	break;
 
-			case eBOX:
-				//int id, int typeID, int groupID, int projectID, std::vector<double> xyz, eObjType
-				if(group <= m_groupsid){
-					baseObj = &Box(m_elements.size(), m_elementsTypeID[eBOX]++, group, m_id);
-					bSucc = addObjectToGroup(baseObj);
-				}
-				else{
-					std::cout << "\nGROUP " << group << " NOT AVAILABLE, DEFAULTING TO GROUP " << m_groupsid << std::endl;
-					bSucc = createGroup();
-					baseObj = &Box(m_elements.size(), m_elementsTypeID[eBOX]++, m_groupsid, m_id);
-				}
-
-
-		}
-	}
-	else{
-		std::cout << "\nOBJECT ALREADY EXISTS" << std::endl;
-	}
-*/
 	return bSucc;
 }
 
@@ -190,16 +158,19 @@ bool Project::open(int projectIDtoOpen){
 }
 
 void Project::loadObject(ElementsRecord r){
-	
-	BaseObject * baseObj = nullptr;
-	/*	int 				id;
+	/*	
+		ElementRecord member variables:
+		int 				id;
 		int 				projectID;
 		int 				groupID;
 		std::string type;
 		int 				typeNum;
 		int 				objID;
 		std::string objNameID;
-		std::vector<double> xyz; */
+		std::vector<double> xyz; 
+	*/
+
+	BaseObject * baseObj = nullptr;
 
 	switch(r.typeNum){
 
@@ -228,10 +199,9 @@ void Project::loadObject(ElementsRecord r){
 
 	
 	if(baseObj){
-		//bSucc = true;
 		std::cout << baseObj->m_id <<". " << baseObj->m_nameid << " LOADED SUCCESSFULLY!" <<std::endl;
 		if(baseObj->m_group != -1 && baseObj->m_enType != eBOUNDINGBOX)//add element to a group if element has group
-			/*bSucc =*/ addObjectToGroup(baseObj, baseObj->m_group);	
+			addObjectToGroup(baseObj, baseObj->m_group);	
 		m_elements[baseObj->m_nameid] = baseObj;
 	}
 
@@ -250,7 +220,7 @@ bool Project::loadProjectData(int projectIDtoOpen){
 	result = m_DBmediator.selectRecords(DefaultElementsTable,"*", strExtraConditions.str());
 
 	std::vector<ElementsRecord> records = m_DBmediator.parseSelectRecords(result);
-	//m_id = records[0].projectID;
+	
 	//populate maps of the project
 	
 	//create groups first
@@ -272,14 +242,6 @@ bool Project::loadProjectData(int projectIDtoOpen){
 		m_elementsTypeID[objects[r].typeNum] = objects[r].objID;
 		loadObject(objects[r]);
 	}
-
-	//adding one to all elements of m_elementsTypeID since the load only gives the latest used, but
-	//this variables stores the next value to use to create groups and objects
-	//std::map<eObjType, int>::iterator it;
-	//for(it=m_elementsTypeID.begin(); it!=m_elementsTypeID.end(); it++){
-	//	it->second++;
-	//}
-	//m_elementsTypeID[eOBJ_UNKNOWN]--;
 
   std::cout << "Loaded Data:\n-" << m_elementsTypeID[eBOUNDINGBOX] << " Groups\n-"
   					<< m_elementsTypeID[eBOX] << " Boxes\n-" << m_elementsTypeID[eCYLINDER] << " Cylinders" 

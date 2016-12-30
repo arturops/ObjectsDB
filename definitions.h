@@ -60,8 +60,5 @@ class ElementsRecord {
 
 };
 
-// static char* DefaultDatabase = "ObjectsDB.db";
-// static char* DefaultElementsTable = "STORED_OBJECTS";
-// static char* DefaultProjectsTable = "PROJECTS_LIST"; 
 
 #endif

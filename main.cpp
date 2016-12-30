@@ -40,19 +40,9 @@ int main(int argc, char** argv)
 	t.doCheckTest(projectID);
 
 	//TO DO'S 
-	// 1. Implement LoadProjectData (build the map from the query and construct all objects) MAYBE THIS FUNCTION SHOULD 
-	// BE INSIDE Project class. This makes a query and gets vector<vector<string>> and populates its own map and 
-	// the map for ELEMENTS ID. 
+	// 1. Create a store function to store values in DB (MAYBE NOT UPDATE CAN BE DONE YET, ONLY NEW OBJECTS ACCEPTED) 
 	//
-	// 1.b. While the map is created make sure that the bounding boxes contain the elements they had
-	//
-	// 1.c. VERIFY THE BOUNDING BOXES AND ALL OBJECTS HAVE THE RIGHT NUMBER (IDS) THEY USED TO HAVE  
-	//
-	// 2. Perform overlap checks of bounding boxes after retrieving them from DB
-	//
-	// 3. Create a store function to store values in DB (MAYBE NOT UPDATE CAN BE DONE YET, ONLY NEW OBJECTS ACCEPTED) 
-	//
-	// 4. Create Menu and options to allow people to load project or create new one
+	// 2. Create Menu and options to allow people to load project or create new one
 	//
 
 }
